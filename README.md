@@ -4,13 +4,13 @@
   <img src=".github/brand/logo-green.svg" alt="MacroPulse" width="72" height="72">
 </picture>
 
-<sub>Part of the <a href="https://github.com/GabrielGauss/macropulse-platform">MacroPulse platform</a></sub>
+<sub>Part of the <a href="https://github.com/macropulse-lab/macropulse-platform">MacroPulse platform</a></sub>
 </div>
 
 # IRL Engine — Public Documentation
 
-[![Docs Version](https://img.shields.io/badge/docs-v1.2.0-blue)](https://macropulse.live/irl)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Docs Version](https://img.shields.io/badge/docs-v2.0.0-blue)](https://irl.macropulse.live)
+[![License](https://img.shields.io/badge/docs-CC%20BY--SA%204.0-green)](LICENSE)
 [![Sandbox](https://img.shields.io/badge/sandbox-live-brightgreen)](https://irl.macropulse.live)
 
 **IRL (Immutable Reasoning Log)** is a cryptographic pre-execution compliance gateway for autonomous AI trading agents. Every trade decision is sealed with SHA-256 before it reaches the exchange, producing a tamper-evident audit trail that maps directly to MiFID II, EU AI Act, and SEC Rule 15c3-5 requirements.
@@ -43,15 +43,15 @@ The full authorize → bind flow:
 | Document | Description |
 |---|---|
 | [Whitepaper](docs/whitepaper.md) | Full IRL protocol specification, cryptographic design, bitemporal model |
-| [Getting Started](docs/getting-started.md) | L1 setup in under a day, Docker, environment variables |
+| [Getting Started](docs/getting-started.md) | Run IRL in under a day: Docker, environment variables, first agent |
 | [Developer Guide](docs/developer-guide.md) | SDK usage (Python, TypeScript, Go), API reference, error codes |
 | [Case Studies](docs/case-studies.md) | Equity fund, prop desk, quant fund deployment examples |
 | [Exchange Integration](docs/exchange-integration.md) | FIX protocol tags, REST order metadata, venue-specific notes |
-| [Pricing](docs/pricing.md) | L1/L2/L3 editions, per-agent pricing, volume discounts |
+| [Free & open](docs/pricing.md) | What's free, licensing (FSL engine, MIT gateway/SDKs), commercial use |
 | [Compliance Guide](docs/compliance/compliance-guide.md) | Regulatory mapping: MiFID II, EU AI Act, SEC 15c3-5, DORA |
 | [Regulatory Mapping](docs/compliance/regulatory-mapping.md) | Table: requirement → IRL mechanism |
 | [Operations Guide](docs/operations/incident-response.md) | Incident response runbook |
-| [SLA](docs/operations/service-level-agreement.md) | Uptime commitments, support tiers |
+| [Service levels](docs/operations/service-level-agreement.md) | What you can rely on (self-hosted, sandbox); no paid SLA yet |
 | [Performance Benchmarks](docs/operations/performance-benchmarks.md) | Throughput, p50/p99 latency at scale |
 | [Diagrams](diagrams/) | Architecture diagrams (Mermaid source + PNG) |
 
@@ -85,7 +85,7 @@ async with IRLClient("https://irl.macropulse.live", "your-token", "https://api.m
         print(result.trace_id, result.reasoning_hash)
 ```
 
-[irl-sdk on PyPI](https://pypi.org/project/irl-sdk/) · [Python SDK repo](https://github.com/GabrielGauss/irl-sdk-python)
+[irl-sdk on PyPI](https://pypi.org/project/irl-sdk/) · [Python SDK repo](https://github.com/macropulse-lab/irl-sdk-python)
 
 ---
 
@@ -132,7 +132,7 @@ if (result.authorized) {
 await client.close();
 ```
 
-[irl-sdk on npm](https://www.npmjs.com/package/irl-sdk) · [TypeScript SDK repo](https://github.com/GabrielGauss/irl-sdk-ts)
+[irl-sdk on npm](https://www.npmjs.com/package/irl-sdk) · [TypeScript SDK repo](https://github.com/macropulse-lab/irl-sdk-ts)
 
 ---
 
@@ -154,10 +154,12 @@ Open [Swagger UI](https://irl.macropulse.live/swagger-ui/), pick an `agent_id`, 
 
 | Repo | Description |
 |---|---|
-| [IRL-engine-AX](https://github.com/GabrielGauss/IRL-engine-AX) | Core IRL Engine — policy checks, cryptographic sealing, Layer 2 |
-| [irl-sdk-python](https://github.com/GabrielGauss/irl-sdk-python) | Async Python SDK |
-| [irl-sdk-ts](https://github.com/GabrielGauss/irl-sdk-ts) | TypeScript/Node.js SDK (CJS + ESM) |
-| [macropulse](https://github.com/GabrielGauss/macropulse) | MacroPulse — the MTA operator powering the Layer 2 heartbeat |
+| [irl](https://github.com/macropulse-lab/irl) | Core IRL Engine: mandates, cryptographic sealing, Layer 2, Bitcoin anchoring (FSL-1.1-ALv2) |
+| [irl-gateway](https://github.com/macropulse-lab/irl-gateway) | MCP server: any AI agent trades through IRL (`pip install irl-gateway`, MIT) |
+| [irl-sdk-python](https://github.com/macropulse-lab/irl-sdk-python) | Async Python SDK (MIT) |
+| [irl-sdk-ts](https://github.com/macropulse-lab/irl-sdk-ts) | TypeScript/Node.js SDK, CJS + ESM (MIT) |
+| [irl-verify](https://github.com/macropulse-lab/irl-verify) | Offline proof-bundle verifier (MIT) |
+| [MacroPulse](https://macropulse.live) | One optional signed regime source (MTA) for Layer 2 |
 
 ---
 
@@ -204,5 +206,5 @@ Code examples in documentation: MIT
 ---
 
 <div align="center">
-<sub>Part of the <a href="https://github.com/GabrielGauss/macropulse-platform">MacroPulse platform</a> · <a href="https://macropulse.live">macropulse.live</a> · <a href="https://macropulse.live/irl">IRL Engine</a></sub>
+<sub>Part of the <a href="https://github.com/macropulse-lab/macropulse-platform">MacroPulse platform</a> · <a href="https://macropulse.live">macropulse.live</a> · <a href="https://macropulse.live/irl">IRL Engine</a></sub>
 </div>
