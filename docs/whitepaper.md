@@ -1,7 +1,15 @@
-# MacroPulse IRL — Intent, Reasoning, and Liability
-## Whitepaper v4.0
+# IRL — Intent, Reasoning, and Liability
+## Whitepaper v5.0
 
-*MacroPulse Research · March 2026*
+*IRL · October 2026 · [github.com/macropulse-lab/irl](https://github.com/macropulse-lab/irl) · [irl.macropulse.live](https://irl.macropulse.live)*
+
+> **What changed in v5.0.** IRL is now its own project: free to use, source
+> available under FSL-1.1-ALv2 (§18), and independent of any regime provider.
+> It runs with no external signal by default (§16). Agent mandates now include
+> asset and venue allowlists (§9). Layer 2 adds server-side regime binding with
+> per-intent replay protection (§8.5). The new **IRL Gateway** connects any MCP
+> agent (Claude, ChatGPT, custom) in one step (§23). Bitcoin anchoring and
+> offline proof bundles, listed as future work in v4.0, are shipping (§22).
 
 ---
 
@@ -9,18 +17,20 @@
 
 Autonomous trading agents make thousands of decisions per day without a human in the loop. Current infrastructure records what they did — not what they knew, what they were permitted to do, or whether the exchange executed what was actually authorised. This gap between agent reasoning and market action is the **Ownership Gap**: the absence of a cryptographic chain of custody from decision to execution.
 
-MacroPulse IRL (Intent, Reasoning, and Liability) is a **signal-agnostic** pre-execution compliance gateway that closes this gap. Before any order leaves the firm, IRL seals the agent's epistemic state — its knowledge of market regime, its model identity, its authorised intent — into a tamper-evident `CognitiveSnapshot`. That snapshot is cryptographically bound to the exchange confirmation, creating an immutable audit chain that no party can alter after the fact.
+IRL (Intent, Reasoning, and Liability) is a **signal-agnostic** pre-execution compliance gateway that closes this gap. Before any order leaves the firm, IRL seals the agent's epistemic state — its knowledge of market regime, its model identity, its authorised intent — into a tamper-evident `CognitiveSnapshot`. That snapshot is cryptographically bound to the exchange confirmation, creating an immutable audit chain that no party can alter after the fact.
 
-IRL is designed around an abstract Market Truth Anchor (MTA) interface. Any cryptographically attested regime signal can serve as the MTA — MacroPulse operates the reference implementation and provides a turnkey integration, but firms running proprietary regime models, third-party signal providers, or multi-operator consensus pipelines connect their own MTA with a single implementation. The seal mechanism, the audit chain, and the compliance guarantees are identical regardless of which regime signal is used.
+IRL needs no external signal to run: each agent's own mandate (notional cap, allowed assets and venues, model identity, status) is the policy. Optionally, IRL binds every decision to a cryptographically attested market regime through an abstract Market Truth Anchor (MTA) interface. MacroPulse operates one such signed regime feed; firms with proprietary regime models or multi-operator consensus pipelines connect their own. The seal mechanism, the audit chain, and the compliance guarantees are identical in every mode.
 
-This document specifies the IRL protocol, its three deployment layers, and the trust architecture that makes the system credible at regulatory scale.
+AI agents increasingly trade through tool interfaces rather than custom code. The IRL Gateway exposes IRL as a Model Context Protocol (MCP) server, so any MCP-capable agent trades under a mandate it cannot break, with its rationale sealed into every trace.
+
+This document specifies the IRL protocol, its three trust layers, and the trust architecture that makes the system credible at regulatory scale.
 
 ---
 
 ## Table of Contents
 
 1. [The Ownership Gap](#1-the-ownership-gap)
-2. [What is MacroPulse IRL?](#2-what-is-macropulse-irl)
+2. [What is IRL?](#2-what-is-irl)
 3. [System Architecture](#3-system-architecture)
 4. [The Market Truth Anchor](#4-the-market-truth-anchor)
 5. [The Cognitive Snapshot](#5-the-cognitive-snapshot)
@@ -39,6 +49,9 @@ This document specifies the IRL protocol, its three deployment layers, and the t
 18. [Licensing](#18-licensing)
 19. [Zero-Knowledge Compliance Proofs](#19-zero-knowledge-compliance-proofs-layer-3)
 20. [Limitations](#20-limitations)
+21. [High-Volume Mode](#21--high-volume-mode-batch-sealing-for-ai-native-workloads)
+22. [Technical Roadmap](#22--technical-roadmap)
+23. [Connecting AI Agents — the IRL Gateway (MCP)](#23-connecting-ai-agents--the-irl-gateway-mcp)
 - [Appendix A — End-to-End Case Study](#appendix-a--end-to-end-case-study)
 - [Appendix B — Diagram Specifications](#appendix-b--diagram-specifications)
 
@@ -76,35 +89,38 @@ The chain cannot be forged, cannot be altered retroactively, and cannot be selec
 
 ---
 
-## 2. What is MacroPulse IRL?
+## 2. What is IRL?
 
 ### 2.1 One-Line Answer
 
 IRL is a **pre-execution compliance gateway** that sits between your autonomous trading agent and the exchange — sealing the agent's reasoning into a cryptographic audit trail before any order is placed.
 
-### 2.2 Three Editions
+### 2.2 Three Layers
 
-#### L1 — IRL Sidecar
-*Drop-in compliance, operational in under a day.*
+Each layer adds one guarantee. The layers describe what is proven, not price
+tiers: L1 and L2 ship in the engine and are free to use (§18). L3 is research.
 
-- Pre-execution policy enforcement (regime-aware, per-agent)
+#### L1 — Audit rail
+*Prove what happened. Operational in under a day.*
+
+- Pre-execution policy enforcement: the agent's mandate (notional cap, allowed assets and venues, status), optionally scaled by the market regime
 - Cryptographic reasoning seal (SHA-256 / RFC 8785)
 - Bitemporal audit ledger (tamper-evident, replay-safe)
 - Multi-Agent Registry (fleet identity and governance)
 - Post-trade verifier (MATCHED / DIVERGENT / EXPIRED lifecycle)
 - REST API — wraps any existing agent in ~20 lines of code
 
-#### L2 — IRL Audit Platform
-*Enterprise compliance with anti-replay and signed market truth.*
+#### L2 — Signed market truth
+*Prove what the market was.*
 
 Everything in L1, plus:
-- Layer 2 signed heartbeats — monotonic sequence + Ed25519 prevents replay attacks
-- MacroPulse MTA integration — regime ground truth is cryptographically attested
+- Regime binding: every authorization is tied to the current Ed25519-signed regime state, and historical regimes cannot be replayed (§8)
+- Any MTA operator: MacroPulse's signed feed, or your own (§16)
 - Compliance dashboard — real-time feed of PENDING, DIVERGENT, and EXPIRED traces
 - Forensic replay — any historical trade reconstructable from its sealed snapshot
 
-#### L3 — IRL Sovereign Gateway
-*For clients where compliance cannot reveal alpha.*
+#### L3 — Prove without revealing (research)
+*For firms where compliance cannot reveal alpha.*
 
 Everything in L2, plus:
 - **TEE execution** (Intel TDX / AMD SEV) — policy enforced in a hardware-attested enclave
@@ -507,7 +523,26 @@ LAYER2_ENABLED=true
 MAX_HEARTBEAT_DRIFT_MS=200
 ```
 
-When enabled, every `POST /irl/authorize` request must include a valid `heartbeat` field. Missing or invalid heartbeats return `401 INVALID_HEARTBEAT`.
+When enabled, every `POST /irl/authorize` request must carry Layer 2 evidence: a heartbeat as above, or a regime reference (§8.5). Missing evidence is rejected with `HEARTBEAT_MISSING`. Layer 2 defaults to on when an MTA is configured and to off in `MTA_MODE=none`, where there is no regime to bind to.
+
+### 8.5 Layer 2 v2 — Server-Side Regime Binding
+
+Signed heartbeats require each agent to fetch and sign regime state within a
+200 ms window, which needs a second credential for the MTA. Layer 2 v2 moves
+the binding to the server:
+
+1. The agent calls `GET /irl/regime` (authenticated) and receives the current
+   `mta_ref`, the hash of IRL's own verified MTA state.
+2. It sends that `mta_ref` with `POST /irl/authorize`. IRL accepts the current
+   reference, or the previous one for `MTA_REF_GRACE_SECS` (default 300) after a
+   regime change. Anything else is rejected with `REGIME_REF_STALE`.
+3. Replay protection moves from heartbeat sequences to the intent itself: each
+   `(agent_id, client_order_id)` can be authorized once. A resubmission returns
+   `409 DUPLICATE_INTENT` with the original `trace_id`, which also makes client
+   retries idempotent.
+
+`LAYER2_MODE` selects `legacy` (heartbeats), `v2` (regime references) or `both`
+(the default, for migration).
 
 ---
 
@@ -519,7 +554,8 @@ The Multi-Agent Registry (MAR) provides fleet-level identity governance. In a fi
 
 1. Is this the registered agent, running the registered model?
 2. Is this agent permitted to trade in the current regime?
-3. Does this intent exceed the agent's notional ceiling?
+3. Is this asset, on this venue, inside the agent's mandate?
+4. Does this intent exceed the agent's notional ceiling?
 
 ### 9.2 AgentProfile
 
@@ -529,27 +565,32 @@ pub struct AgentProfile {
     pub name:             String,
     pub model_hash_hex:   String,          // SHA-256 of model version + config
     pub policy_module_id: String,          // built-in policy variant label
-    pub allowed_regimes:  Vec<i16>,        // regime IDs this agent may trade
-    pub max_notional:     f64,             // per-decision notional ceiling (USD)
-    pub max_leverage:     f64,             // maximum leverage multiple
-    pub allowed_venues:   Option<Vec<String>>,  // None = all venues
-    pub status:           String,          // "Active" | "Suspended" | "Deregistered"
+    pub allowed_regimes:  Option<Vec<i16>>,     // None = any regime
+    pub max_notional:     f64,                  // per-decision notional ceiling
+    pub max_leverage:     f64,                  // recorded; not enforced (authorize carries no leverage)
+    pub allowed_venues:   Option<Vec<String>>,  // None = any venue; enforced, case-insensitive
+    pub allowed_assets:   Option<Vec<String>>,  // None = any asset; enforced, case-insensitive
+    pub status:           String,               // "Active" | "Suspended" | "Deregistered"
 }
 ```
 
+An empty allowlist permits nothing. Suspending an agent (`PATCH /irl/agents/:id/status`) stops it immediately: every later authorize fails with `AGENT_NOT_ACTIVE`.
+
 ### 9.3 Authorization Flow
 
-For every `POST /irl/authorize`, the MAR performs four checks before the snapshot is assembled:
+For every `POST /irl/authorize`, the MAR and the policy engine perform these checks before the snapshot is committed:
 
 ```
 1. agent_id exists in irl.agent_registry                → AgentNotFound (404)
 2. profile.status == "Active"                           → AgentNotActive (403)
 3. model_hash_hex matches observed model hash           → ModelHashMismatch (403)
 4. current_regime_id in profile.allowed_regimes         → RegimeUnauthorized (403)
-5. intent.notional ≤ profile.max_notional               → NotionalExceedsLimit (403)
+5. venue_id in profile.allowed_venues                   → VenueUnauthorized (403)
+6. asset in profile.allowed_assets                      → AssetUnauthorized (403)
+7. intent.notional ≤ max_notional × regime scale        → NotionalExceedsLimit (403)
 ```
 
-All five checks must pass before the snapshot is assembled. A failure at any step blocks the trade and returns a structured error — no trace is committed.
+All checks must pass. A failure at any step blocks the trade and returns a structured error — no trace is committed.
 
 ### 9.4 Fleet Management API
 
@@ -770,7 +811,7 @@ IRL's cryptographic guarantees are only as strong as the integrity of its inputs
 | Trade surveillance | ✗ | ✓ | ✗ | ✗ |
 | Risk systems | Partial | ✗ | ✗ | Partial |
 | Attestation services | ✗ | Partial | ✗ | ✗ |
-| **MacroPulse IRL** | **✓** | **✓** | **✓** | **✓** |
+| **IRL** | **✓** | **✓** | **✓** | **✓** |
 
 There is no direct competitor. IRL fills a gap that currently has no solution — not because the problem is new, but because the cryptographic primitives required to solve it at production scale have only recently become viable at acceptable latency.
 
@@ -804,25 +845,31 @@ Any firm can build logging. No firm can retroactively build a cryptographic chai
 
 ### 15.1 Prerequisites
 
-- PostgreSQL 14+ (TimescaleDB compatible — shared with MacroPulse is supported)
-- MacroPulse API access (for the MTA endpoint and Ed25519 public key)
-- Docker, or Rust toolchain (edition 2021)
+- PostgreSQL 14+ with the `pg_partman` extension (the bundled compose file includes it)
+- Docker, or the Rust toolchain (edition 2021)
+- Optional: a signed regime source (MTA) such as MacroPulse. Not needed to run IRL.
 
 ### 15.2 Configuration
 
-Copy `.env.example` to `.env` and set four required values:
+Copy `.env.example` to `.env`. Two values are required:
 
 ```dotenv
-MTA_URL=https://your-mta-operator.com
-MTA_PUBKEY_HEX=<64-char hex Ed25519 public key from your MTA operator>
 DATABASE_URL=postgres://user:pass@localhost:5432/yourdb
 IRL_API_TOKENS=<comma-separated bearer tokens, one per client/fund>
+```
+
+That runs IRL in `MTA_MODE=none`: mandates enforced, every decision sealed and anchored, no external signal. To bind decisions to a signed regime feed, add:
+
+```dotenv
+MTA_URL=https://your-mta-operator.com          # MTA_MODE then defaults to "external"
+MTA_PUBKEY_HEX=<64-char hex Ed25519 public key from your MTA operator>
 ```
 
 Optional configuration with production-ready defaults:
 
 ```dotenv
-LAYER2_ENABLED=false          # Enable heartbeat enforcement
+LAYER2_ENABLED=true           # default: on with an MTA, off with MTA_MODE=none
+LAYER2_MODE=both              # legacy | v2 | both (§8.5)
 MAX_HEARTBEAT_DRIFT_MS=200    # Maximum heartbeat age
 BIND_SIZE_TOLERANCE=0.0001    # Quantity tolerance (0.01%)
 TRACE_EXPIRY_MS=3600000       # 1 hour before PENDING → EXPIRED
@@ -855,8 +902,9 @@ curl -X POST http://localhost:4000/irl/agents \
   -d '{
     "name": "my-btc-bot",
     "model_hash_hex": "<sha256_of_model_config>",
-    "allowed_regimes": [0, 1, 2, 3],
-    "max_notional": 500000.0
+    "max_notional": 500000.0,
+    "allowed_assets": ["BTC/USDT", "ETH/USDT"],
+    "allowed_venues": ["binance"]
   }'
 ```
 
@@ -927,11 +975,12 @@ print(f"{result['verification_status']} — proof: {result['final_proof']}")
 ### 15.6 Incremental Adoption Path
 
 ```
-Day 1:   L1 sidecar running, first agent registered, bot wrapped
-Week 1:  Compliance team reads /irl/orphans daily
-Month 1: Enable LAYER2_ENABLED=true for heartbeat enforcement
-Month 3: Per-regime notional limits tuned per agent in MAR
-Later:   L3 TEE / ZK when regulatory requirements escalate
+Day 1:   SHADOW_MODE=true: everything sealed, nothing blocked; first agent registered
+         (or an MCP agent connected through the IRL Gateway on paper, §23)
+Week 1:  Compare IRL's verdicts with live behaviour; compliance reads /irl/orphans daily
+Month 1: Enforcement on; mandates (caps, assets, venues) tuned per agent
+Later:   Signed regime binding (Layer 2) where a regime source is trusted;
+         L3 TEE / ZK when regulatory requirements escalate
 ```
 
 ---
@@ -947,18 +996,26 @@ pub trait MtaClient: Send + Sync {
 }
 ```
 
-This abstraction allows two distinct deployment modes:
+`MTA_MODE` selects the source:
 
-### 16.1 MacroPulse as a Managed MTA Service
+| `MTA_MODE` | Behaviour | Default when |
+|---|---|---|
+| `none` | No external signal. Mandates enforced, all directions allowed, every trace records `signal_mode = "none"`. | No `MTA_URL` is set |
+| `external` | A signed regime feed at `MTA_URL`, verified with `MTA_PUBKEY_HEX`. (`macropulse` and `custom` are accepted aliases.) | `MTA_URL` is set |
+| `mock` | A fixed permissive regime, for evaluation and CI only. | Never |
 
-MacroPulse operates a production-ready HMM-based regime inference pipeline. `MacroPulseMtaClient` implements the `MtaClient` trait and:
+An unrecognised value fails startup instead of silently choosing a mode.
+
+### 16.1 External Signed Regime Feed (e.g. MacroPulse)
+
+MacroPulse operates an HMM-based regime inference pipeline and publishes one such feed. The external client implements the `MtaClient` trait and:
 
 - Connects to the MacroPulse broadcast endpoint
 - Verifies the Ed25519 signature against the pre-registered public key
 - Caches the latest state for low-latency policy evaluation (100ms TTL)
 - Enforces the heartbeat freshness constraint
 
-This mode is turnkey: firms deploy IRL with no additional MTA infrastructure. MacroPulse provides a service-level agreement on regime availability, signature validity, and broadcast latency.
+Any operator publishing the same signed format works the same way.
 
 ### 16.2 Custom MTA Client
 
@@ -988,7 +1045,8 @@ As long as the returned `MtaState` is properly signed, timestamped, and fresh, t
 ### 16.3 Deployment Flexibility
 
 ```
-Initial:  MacroPulseMtaClient — single trusted signer, minimal setup
+Start:    MTA_MODE=none — mandates only, nothing external to trust
+Then:     MTA_MODE=external — one trusted signer (MacroPulse or your own)
 Maturity: Custom client with consortium aggregation (§17) — no engine changes required
 ```
 
@@ -1095,15 +1153,17 @@ Phase 4 (when regulated): k-of-n with slashing and DAO governance
 
 ## 18. Licensing
 
-IRL is available under dual licensing:
+IRL is free to use.
 
-**Open protocol**: The IRL protocol specification — the snapshot format, sealing algorithm, bitemporal constraints, and API contract — is published openly. Any implementation that conforms to the specification interoperates with the MacroPulse ecosystem.
+**Engine — FSL-1.1-ALv2.** The engine's source is public at [github.com/macropulse-lab/irl](https://github.com/macropulse-lab/irl) under the Functional Source License. Any use is permitted, including commercial use inside your own firm, except a Competing Use: offering IRL, or something substantially similar, to others as a commercial product or service. Every release becomes available under Apache 2.0 on the second anniversary of its publication.
 
-**Commercial license**: Firms requiring proprietary integration, white-label deployment, or L3 (TEE / Wasm / ZK) capabilities require a commercial license. Licensing is structured on a per-agent or per-trade basis. FRAND terms are available for standard-essential implementations.
+**Gateway, SDKs and verifier — MIT.** [irl-gateway](https://github.com/macropulse-lab/irl-gateway), [irl-sdk-python](https://github.com/macropulse-lab/irl-sdk-python), [irl-sdk-ts](https://github.com/macropulse-lab/irl-sdk-ts) and [irl-verify](https://github.com/macropulse-lab/irl-verify) are MIT licensed. Verification is free for everyone, forever.
 
-**Enterprise SLA**: MacroPulse provides enterprise SLAs covering MTA availability, signature validity, broadcast latency, and engine support.
+**Open protocol.** The snapshot format, sealing algorithm, bitemporal constraints and API contract are published openly ([irl-public-docs](https://github.com/macropulse-lab/irl-public-docs)), and any conforming implementation interoperates.
 
-Contact: gabriel.veron134@gmail.com
+**Commercial licence.** Hosting IRL for others, embedding it in a product you sell, or white-label deployment needs a commercial licence. A hosted offering for teams may follow, shaped by early users.
+
+Contact: hello@macropulse.live
 
 ---
 
@@ -1640,13 +1700,22 @@ is:
 | Prometheus metrics endpoint | ✅ v1.1 |
 | Python SDK | ✅ v1.1 |
 | TypeScript SDK | ✅ v1.1 |
+| Daily Merkle anchors on Bitcoin (OpenTimestamps), public anchor feed | ✅ v1.3 |
+| Proof bundle export + offline verifier (`irl-verify`) | ✅ v1.3 |
+| Layer 2 v2: server-side regime binding, per-intent replay protection | ✅ Oct 2026 |
+| Standalone mode (`MTA_MODE=none`, no external dependency) | ✅ Oct 2026 |
+| Agent mandates: asset and venue allowlists | ✅ Oct 2026 |
+| IRL Gateway (MCP server) on PyPI and the official MCP Registry | ✅ Oct 2026 |
 
-### 22.2 Near-Term (v1.2 — Q3 2026)
+### 22.2 Next
 
-**Exchange-native binding:** Direct exchange API adapters (Binance, FTX-compat,
-Interactive Brokers) that auto-submit bind requests on receipt of execution
-reports, eliminating the need for the agent to call `/irl/bind-execution`
-manually.
+**Exchange-native binding:** Direct exchange adapters (Binance, Interactive
+Brokers, Alpaca) that bind on receipt of execution reports. The IRL Gateway
+already does this for agents that trade through it (§23).
+
+**More mandate controls:** a leverage field on authorize (so `max_leverage` can
+be enforced), per-agent order-rate limits, and limit-order support in the
+gateway.
 
 **MTA multi-operator consensus:** `ThresholdMtaClient` — aggregate N MTA
 operator feeds with a k-of-N signature threshold. A single operator going offline
@@ -1668,10 +1737,6 @@ the agent's feature values or position sizes*. Intended for multi-firm audit
 scenarios where the auditor must verify compliance without seeing proprietary
 trading signals.
 
-**On-chain anchoring:** Periodic publication of batch roots to an EVM-compatible
-chain (or Bitcoin Ordinals). Provides third-party verifiability without storing
-trade data on-chain.
-
 **Formal verification of the policy engine:** TLA+ or Lean 4 specification of
 the `check_constraints` function and the bitemporal invariant. Target: prove that
 no combination of inputs can produce a `reasoning_hash` that both (a) passes
@@ -1689,12 +1754,62 @@ attestation.
 multiple chains for Byzantine fault tolerance. An agent can verify the regime
 state against any supported chain without trusting a single operator.
 
-**Agentic finance compliance layer:** Standardised IRL connector interfaces for
-major AI agent frameworks (LangChain, AutoGen, CrewAI, custom), enabling any
-agent runtime to plug into IRL with a one-function integration regardless of the
-underlying model stack.
+**Agent framework connectors:** the IRL Gateway covers any MCP-capable runtime
+today. Native connectors for frameworks that don't speak MCP (LangChain,
+AutoGen, CrewAI) are a candidate next step.
 
 ---
 
-*MacroPulse IRL Whitepaper v4.0 — March 2026*
+## §23 Connecting AI Agents — the IRL Gateway (MCP)
+
+### 23.1 Why a Gateway
+
+Brokers now let AI agents trade on a user's behalf through tool interfaces.
+Robinhood's agentic accounts and Alpaca's and Interactive Brokers' MCP servers
+are examples. These interfaces give an agent an account, but not a mandate or
+an audit trail. The IRL Gateway puts IRL between the agent and the account.
+
+### 23.2 What the Agent Sees
+
+The gateway is an MCP server ([github.com/macropulse-lab/irl-gateway](https://github.com/macropulse-lab/irl-gateway),
+`pip install irl-gateway`, listed in the official MCP Registry as
+`io.github.macropulse-lab/irl-gateway`). One tool moves money:
+
+| Tool | Behaviour |
+|---|---|
+| `execute_trade(symbol, side, rationale, quantity \| notional)` | authorize → place → bind; returns `filled`, `denied`, `blocked` or `failed` with the trace id and verdict |
+| `get_policy` | the agent's mandate as IRL enforces it, plus the local kill switch |
+| `get_quote`, `get_balances` | price and account (paper or exchange) |
+| `get_trace` | IRL's sealed record of a trade |
+| `list_recent_trades` | each rationale next to its sealed hash |
+
+### 23.3 Sealing the Rationale
+
+`execute_trade` requires a written rationale. The gateway builds a context
+(rationale, symbol, side, quantity, reference price, venue, model id, client
+order id), hashes its RFC 8785-style canonical JSON with SHA-256, and sends the
+hash as `prompt_version = "ctx-sha256:<hex>"`. The hash is therefore part of the
+sealed `reasoning_hash`. The plaintext stays in the operator's local journal, so
+anyone holding a journal entry can recompute the hash and match it to the
+anchored trace, while IRL itself never sees the text.
+
+### 23.4 Safety Properties
+
+- **Fail closed:** IRL unreachable or denying means no order is sent.
+- **Kill switch:** a local file stops every trade before IRL is consulted.
+- **No silent fills:** a fill whose bind fails is reported to the agent and
+  remains visible in `/irl/pending` for reconciliation.
+- **Paper first:** simulated fills at live public prices by default, with a
+  persistent paper account.
+
+### 23.5 Reference Deployment
+
+The IRL reference agent, a volatility-targeted BTC strategy, trades through
+the gateway in production on paper, once a day. Every rationale is sealed, and
+when the regime turns risk-off, IRL refuses its buys, with the refusal on the
+record as well.
+
+---
+
+*IRL Whitepaper v5.0 — October 2026*
 *All cryptographic values in Appendix A are real outputs from the live system.*

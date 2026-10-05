@@ -5,6 +5,23 @@ Follows [Semantic Versioning](https://semver.org/) in sync with the IRL Engine r
 
 ---
 
+## [2.0.0] — 2026-10-05
+
+### Changed
+- **IRL is free.** Per-agent pricing and paid editions are withdrawn; `pricing.md` is now
+  "Free & open" (FSL-1.1-ALv2 engine, MIT gateway, SDKs and verifier).
+- **Whitepaper v5.0** (synced from the engine): standalone `MTA_MODE=none`, asset and venue
+  mandates, Layer 2 v2 regime binding, licensing, corrected roadmap, and a new section on the
+  IRL Gateway (MCP).
+- Getting started and developer guide replaced with the engine's maintained versions.
+- The service-levels page no longer promises uptime credits for a paid service that doesn't exist.
+- All repository links moved to the `macropulse-lab` organisation; the public engine is
+  [macropulse-lab/irl](https://github.com/macropulse-lab/irl) (`IRL-engine-AX` is retired).
+- README: licence badge corrected to CC BY-SA 4.0 (the actual licence of these docs); the
+  ecosystem table adds irl-gateway and irl-verify and no longer links a private repository.
+
+---
+
 ## [1.2.0] — 2026-04-14
 
 ### Added
@@ -45,6 +62,6 @@ Follows [Semantic Versioning](https://semver.org/) in sync with the IRL Engine r
 - Compliance guide: MiFID II, EU AI Act, SEC 15c3-5, DORA regulatory mapping
 - SLA document: uptime commitments, support tiers
 
-[1.2.0]: https://github.com/GabrielGauss/irl-public-docs/releases/tag/v1.2.0
-[1.1.0]: https://github.com/GabrielGauss/irl-public-docs/releases/tag/v1.1.0
-[1.0.0]: https://github.com/GabrielGauss/irl-public-docs/releases/tag/v1.0.0
+[1.2.0]: https://github.com/macropulse-lab/irl-public-docs/releases/tag/v1.2.0
+[1.1.0]: https://github.com/macropulse-lab/irl-public-docs/releases/tag/v1.1.0
+[1.0.0]: https://github.com/macropulse-lab/irl-public-docs/releases/tag/v1.0.0

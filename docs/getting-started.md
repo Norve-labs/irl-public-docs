@@ -1,4 +1,4 @@
-# Getting Started — L1 Sidecar
+# Getting Started
 
 > **Try it without installing anything:** visit the public sandbox at the demo URL,
 > open `/swagger-ui/`, and use one of the pre-seeded demo agents
@@ -29,10 +29,12 @@ pre-execution gateway in under a day, without changing your existing trading bot
 ## Prerequisites
 
 - PostgreSQL 14+ (standalone, or shared with any existing DB)
-- An MTA — three options:
-  - **Mock (fastest, no account needed):** set `MTA_MODE=mock` — full engine evaluation with no external dependency
-  - **MacroPulse (turnkey reference operator):** set `MTA_URL` and `MTA_PUBKEY_HEX`
+- Optionally, a regime source (MTA). Not required:
+  - **None (the default with no `MTA_URL`):** no external signal. Mandates (caps, assets, venues) are enforced and every trace records `signal_mode="none"`.
+  - **External signed feed:** set `MTA_URL` and `MTA_PUBKEY_HEX` (for example MacroPulse's regime feed); `MTA_MODE` then defaults to `external`.
+  - **Mock (evaluation only):** `MTA_MODE=mock`, a fixed permissive regime.
   - **Custom MTA:** implement the `MtaClient` trait and map your model output to `risk_level`, `max_notional_scale`, `allowed_sides` (see `src/mta.rs`)
+- Connecting an AI agent rather than code? Use the IRL Gateway (MCP): `pip install irl-gateway`, see https://github.com/macropulse-lab/irl-gateway
 - Docker, or a Rust toolchain if building from source
 
 ---
@@ -128,7 +130,97 @@ print(digest)  # 64-char hex — use this as model_hash_hex
 
 Before your bot sends an order, call `/irl/authorize`. After the exchange confirms, call `/irl/bind-execution`. Everything else in your bot stays the same.
 
-**Python example:**
+**Python SDK:**
+
+```bash
+pip install irl-sdk
+```
+
+```python
+import asyncio
+from irl_sdk import IRLClient, AuthorizeRequest, TradeAction, OrderType
+
+IRL_URL = "http://localhost:4000"
+MTA_URL = "https://api.macropulse.live"  # or your MTA operator
+API_TOKEN = "your-secret-token-here"
+AGENT_ID = "your-agent-uuid"
+MODEL_HASH = "your-model-hash-hex"
+
+async def trade():
+    async with IRLClient(IRL_URL, API_TOKEN, MTA_URL) as client:
+        req = AuthorizeRequest(
+            agent_id=AGENT_ID,
+            model_id="my-model-v1.2",
+            model_hash_hex=MODEL_HASH,
+            action=TradeAction.LONG,
+            asset="BTC-USD",
+            order_type=OrderType.MARKET,
+            venue_id="coinbase",
+            quantity=2.0,
+            notional=120_000.0,
+            notional_currency="USD",
+        )
+        auth = await client.authorize(req)
+        if not auth.authorized:
+            raise RuntimeError("IRL blocked trade")
+
+        fill = await your_exchange_client.place_order(...)  # unchanged
+
+        bind = await client.bind_execution(
+            trace_id=auth.trace_id,
+            exchange_tx_id=fill.order_id,
+            execution_status="Filled",
+            asset="BTC-USD",
+            executed_quantity=fill.qty,
+            execution_price=fill.price,
+        )
+        print(bind["verification_status"])  # MATCHED
+```
+
+**TypeScript SDK (Node.js ≥ 18):**
+
+```bash
+npm install irl-sdk
+```
+
+```ts
+import { IRLClient } from "irl-sdk";
+
+const client = new IRLClient({
+  irlUrl: "http://localhost:4000",
+  apiToken: process.env.IRL_API_TOKEN!,
+  mtaUrl: "https://api.macropulse.live",
+});
+
+const auth = await client.authorize({
+  agent_id: "your-agent-uuid",
+  model_id: "my-model-v1.2",
+  model_hash_hex: "your-model-hash-hex",
+  action: "Long",
+  asset: "BTC-USD",
+  venue_id: "CBSE",
+  quantity: 2.0,
+  notional: 120_000,
+});
+
+if (!auth.authorized) throw new Error("IRL blocked trade");
+
+const fill = await yourExchangeClient.placeOrder(/* unchanged */);
+
+const bind = await client.bindExecution({
+  trace_id: auth.trace_id,
+  exchange_tx_id: fill.orderId,
+  execution_status: "Filled",
+  asset: "BTC-USD",
+  executed_quantity: fill.qty,
+  execution_price: fill.price,
+});
+console.log(bind.status);  // MATCHED
+
+await client.close();
+```
+
+**Raw HTTP (no SDK):**
 ```python
 import requests, json, time
 
@@ -267,8 +359,9 @@ Start here, add more when you need it:
 ```
 Day 1:   L1 sidecar running, first agent registered, bot wrapped
 Week 1:  Compliance team gets read access to /irl/orphans dashboard
-Month 1: Enable LAYER2_ENABLED=true for heartbeat anti-replay
-Month 3: Add per-regime notional limits per agent in MAR
+         Enable LAYER2_ENABLED=true — heartbeat anti-replay is production-ready
+Month 1: Add per-regime notional limits per agent in MAR
+Month 3: Wire MacroPulse MTA or your own MtaClient for regime-aware enforcement
 Later:   L3 TEE / ZK proofs when regulatory requirements escalate
 ```
 

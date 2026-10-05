@@ -129,11 +129,11 @@ import { IRLClient, IRLError, IRLHeartbeatError } from "irl-sdk";
 const client = new IRLClient({
   irlUrl: "https://irl.macropulse.live",
   apiToken: process.env.IRL_API_TOKEN!,
-  mtaUrl: "https://api.macropulse.live",
-  timeoutMs: 5_000,
+  mtaUrl: "https://api.macropulse.live",  // omit if LAYER2_ENABLED=false
+  timeoutMs: 5_000,                        // optional, default 5000
 });
 
-// Authorize — heartbeat fetched automatically
+// Authorize — fetches a fresh heartbeat automatically
 const auth = await client.authorize({
   agent_id: "00000000-0000-0000-0000-000000000001",
   model_id: "hmm-v3.1",
@@ -144,32 +144,38 @@ const auth = await client.authorize({
   quantity: 2.0,
   notional: 120_000,
 });
+// auth.trace_id, auth.reasoning_hash, auth.authorized, auth.shadow_blocked
 
-// Bind — closes the cryptographic chain
+// Bind — closes the cryptographic chain after exchange confirmation
 const bind = await client.bindExecution({
   trace_id: auth.trace_id,
   exchange_tx_id: "EX-12345",
-  execution_status: "Filled",
+  execution_status: "Filled",  // "Filled" | "PartialFill" | "Rejected" | "Expired"
   asset: "BTC-PERP",
   executed_quantity: 2.0,
   execution_price: 61_234.50,
 });
+// bind.status, bind.final_proof
 
 await client.close();
 ```
 
 **Error handling:**
+
 ```ts
 try {
   const auth = await client.authorize(req);
 } catch (err) {
-  if (err instanceof IRLHeartbeatError) { /* MTA unreachable */ }
-  else if (err instanceof IRLError) { console.error(err.status, err.body); }
+  if (err instanceof IRLHeartbeatError) {
+    // MTA heartbeat fetch failed — check mtaUrl / network
+  } else if (err instanceof IRLError) {
+    console.error(err.status, err.body);  // 4xx/5xx from IRL Engine
+  }
 }
 ```
 
-`action` serialisation: `"Long"` → `{ Long: quantity }`, `"Short"` → `{ Short: quantity }`, `"Neutral"` → `"Neutral"`.
-Requires Node.js ≥ 18. Exports both CJS and ESM. See [irl-sdk on npm](https://www.npmjs.com/package/irl-sdk).
+`action` serialisation: `"Long"` → `{ Long: quantity }`, `"Short"` → `{ Short: quantity }`, `"Neutral"` → `"Neutral"` (string).
+Heartbeats are fetched automatically per `authorize` call — do not cache or reuse them across calls (Layer 2 anti-replay).
 
 ---
 
@@ -218,7 +224,31 @@ except IRLError as e:
 
 ---
 
-## 4. Heartbeat (Layer 2)
+## 4. Layer 2: regime binding
+
+### v2 (recommended): regime reference
+
+With `LAYER2_MODE=v2` or `both` (the default), bind each authorize to the regime
+IRL itself verified, with no second credential and no wall-clock window:
+
+```bash
+curl -H "Authorization: Bearer $TOKEN" https://your-irl-host/irl/regime
+# {"mta_ref": "6bc13d30…", "regime_label": "expansion", "layer2_mode": "both",
+#  "mta_ref_grace_secs": 300, "previous_mta_ref": null, …}
+```
+
+Send it as `"mta_ref"` in `POST /irl/authorize`. Rules:
+
+- The current ref is always accepted; the one it replaced is accepted for
+  `MTA_REF_GRACE_SECS` (default 300) after a regime change. Otherwise
+  **409 `REGIME_REF_STALE`**: refetch `/irl/regime` and resubmit.
+- One intent per `(agent_id, client_order_id)`. Resubmitting returns
+  **409 `DUPLICATE_INTENT`** with the original trace id, which makes retries
+  idempotent. Use a fresh `client_order_id` per order.
+- A request carrying `mta_ref` takes the v2 path even if a heartbeat is also present.
+
+### Legacy: signed heartbeat
+
 
 Layer 2 provides anti-replay and anti-drift protection. When `LAYER2_ENABLED=true`
 (the production default), every authorize request must include a `SignedHeartbeat`.
@@ -433,6 +463,9 @@ curl -s -X POST http://localhost:4000/irl/bind-execution \
 | `TIME_SOURCE` | `System` | `System` (default) or `NtpSynced`. **Note:** `NtpSynced` is a Phase-2 stub — it currently falls back to system clock. A warning is logged at startup. Do not rely on it for attestation. |
 | `RATE_LIMIT_PER_SECOND` | `100` | Maximum requests per bearer token per second. Set to `0` to disable. Applies to all protected routes. |
 | `MAX_BODY_BYTES` | `1048576` | Maximum allowed request body size in bytes (default 1 MB). Requests exceeding this return `413 Payload Too Large`. |
+| `KMS_PROVIDER` | `none` | Encryption provider for reasoning snapshots at rest. `none` = plaintext; `local` = AES-256 DEK per trace. |
+| `LOCAL_KMS_KEY` | — | 32-byte hex master key for `KMS_PROVIDER=local`. Required when provider is `local`. |
+| `KMS_KEY_VERSION` | — | Key version label (e.g. `1`). Stored on each encrypted record for future key rotation. |
 
 ---
 
