@@ -1,10 +1,5 @@
 <div align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/brand/logo-mono.svg">
-  <img src=".github/brand/logo-green.svg" alt="MacroPulse" width="72" height="72">
-</picture>
-
-<sub>Part of the <a href="https://github.com/macropulse-lab/macropulse-platform">MacroPulse platform</a></sub>
+<sub>IRL by <a href="https://github.com/horkos-labs">Horkos Labs</a></sub>
 </div>
 
 # IRL Engine — Public Documentation
@@ -206,5 +201,5 @@ Code examples in documentation: MIT
 ---
 
 <div align="center">
-<sub>Part of the <a href="https://github.com/macropulse-lab/macropulse-platform">MacroPulse platform</a> · <a href="https://macropulse.live">macropulse.live</a> · <a href="https://macropulse.live/irl">IRL Engine</a></sub>
+<sub>IRL by <a href="https://github.com/horkos-labs">Horkos Labs</a> · <a href="https://irl.macropulse.live">irl.macropulse.live</a></sub>
 </div>
