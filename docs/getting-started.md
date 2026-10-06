@@ -34,7 +34,7 @@ pre-execution gateway in under a day, without changing your existing trading bot
   - **External signed feed:** set `MTA_URL` and `MTA_PUBKEY_HEX` (for example MacroPulse's regime feed); `MTA_MODE` then defaults to `external`.
   - **Mock (evaluation only):** `MTA_MODE=mock`, a fixed permissive regime.
   - **Custom MTA:** implement the `MtaClient` trait and map your model output to `risk_level`, `max_notional_scale`, `allowed_sides` (see `src/mta.rs`)
-- Connecting an AI agent rather than code? Use the IRL Gateway (MCP): `pip install irl-gateway`, see https://github.com/macropulse-lab/irl-gateway
+- Connecting an AI agent rather than code? Use the IRL Gateway (MCP): `pip install irl-gateway`, see https://github.com/horkos-labs/irl-gateway
 - Docker, or a Rust toolchain if building from source
 
 ---

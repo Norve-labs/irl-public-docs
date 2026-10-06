@@ -1,7 +1,7 @@
 # IRL — Intent, Reasoning, and Liability
 ## Whitepaper v5.0
 
-*IRL · October 2026 · [github.com/macropulse-lab/irl](https://github.com/macropulse-lab/irl) · [irl.macropulse.live](https://irl.macropulse.live)*
+*IRL · October 2026 · [github.com/horkos-labs/irl](https://github.com/horkos-labs/irl) · [irl.macropulse.live](https://irl.macropulse.live)*
 
 > **What changed in v5.0.** IRL is now its own project: free to use, source
 > available under FSL-1.1-ALv2 (§18), and independent of any regime provider.
@@ -1155,11 +1155,11 @@ Phase 4 (when regulated): k-of-n with slashing and DAO governance
 
 IRL is free to use.
 
-**Engine — FSL-1.1-ALv2.** The engine's source is public at [github.com/macropulse-lab/irl](https://github.com/macropulse-lab/irl) under the Functional Source License. Any use is permitted, including commercial use inside your own firm, except a Competing Use: offering IRL, or something substantially similar, to others as a commercial product or service. Every release becomes available under Apache 2.0 on the second anniversary of its publication.
+**Engine — FSL-1.1-ALv2.** The engine's source is public at [github.com/horkos-labs/irl](https://github.com/horkos-labs/irl) under the Functional Source License. Any use is permitted, including commercial use inside your own firm, except a Competing Use: offering IRL, or something substantially similar, to others as a commercial product or service. Every release becomes available under Apache 2.0 on the second anniversary of its publication.
 
-**Gateway, SDKs and verifier — MIT.** [irl-gateway](https://github.com/macropulse-lab/irl-gateway), [irl-sdk-python](https://github.com/macropulse-lab/irl-sdk-python), [irl-sdk-ts](https://github.com/macropulse-lab/irl-sdk-ts) and [irl-verify](https://github.com/macropulse-lab/irl-verify) are MIT licensed. Verification is free for everyone, forever.
+**Gateway, SDKs and verifier — MIT.** [irl-gateway](https://github.com/horkos-labs/irl-gateway), [irl-sdk-python](https://github.com/horkos-labs/irl-sdk-python), [irl-sdk-ts](https://github.com/horkos-labs/irl-sdk-ts) and [irl-verify](https://github.com/horkos-labs/irl-verify) are MIT licensed. Verification is free for everyone, forever.
 
-**Open protocol.** The snapshot format, sealing algorithm, bitemporal constraints and API contract are published openly ([irl-public-docs](https://github.com/macropulse-lab/irl-public-docs)), and any conforming implementation interoperates.
+**Open protocol.** The snapshot format, sealing algorithm, bitemporal constraints and API contract are published openly ([irl-public-docs](https://github.com/horkos-labs/irl-public-docs)), and any conforming implementation interoperates.
 
 **Commercial licence.** Hosting IRL for others, embedding it in a product you sell, or white-label deployment needs a commercial licence. A hosted offering for teams may follow, shaped by early users.
 
@@ -1771,7 +1771,7 @@ an audit trail. The IRL Gateway puts IRL between the agent and the account.
 
 ### 23.2 What the Agent Sees
 
-The gateway is an MCP server ([github.com/macropulse-lab/irl-gateway](https://github.com/macropulse-lab/irl-gateway),
+The gateway is an MCP server ([github.com/horkos-labs/irl-gateway](https://github.com/horkos-labs/irl-gateway),
 `pip install irl-gateway`, listed in the official MCP Registry as
 `io.github.macropulse-lab/irl-gateway`). One tool moves money:
 
