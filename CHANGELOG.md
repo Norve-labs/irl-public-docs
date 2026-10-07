@@ -16,7 +16,7 @@ Follows [Semantic Versioning](https://semver.org/) in sync with the IRL Engine r
 - Getting started and developer guide replaced with the engine's maintained versions.
 - The service-levels page no longer promises uptime credits for a paid service that doesn't exist.
 - All repository links moved to the `macropulse-lab` organisation; the public engine is
-  [horkos-labs/irl](https://github.com/horkos-labs/irl) (`IRL-engine-AX` is retired).
+  [norve-labs/irl](https://github.com/norve-labs/irl) (`IRL-engine-AX` is retired).
 - README: licence badge corrected to CC BY-SA 4.0 (the actual licence of these docs); the
   ecosystem table adds irl-gateway and irl-verify and no longer links a private repository.
 
@@ -62,6 +62,6 @@ Follows [Semantic Versioning](https://semver.org/) in sync with the IRL Engine r
 - Compliance guide: MiFID II, EU AI Act, SEC 15c3-5, DORA regulatory mapping
 - SLA document: uptime commitments, support tiers
 
-[1.2.0]: https://github.com/horkos-labs/irl-public-docs/releases/tag/v1.2.0
-[1.1.0]: https://github.com/horkos-labs/irl-public-docs/releases/tag/v1.1.0
-[1.0.0]: https://github.com/horkos-labs/irl-public-docs/releases/tag/v1.0.0
+[1.2.0]: https://github.com/norve-labs/irl-public-docs/releases/tag/v1.2.0
+[1.1.0]: https://github.com/norve-labs/irl-public-docs/releases/tag/v1.1.0
+[1.0.0]: https://github.com/norve-labs/irl-public-docs/releases/tag/v1.0.0

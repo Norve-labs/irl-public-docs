@@ -15,7 +15,7 @@ You run it, so availability is yours. The engine is built for it:
 - Unbound traces remain visible in `/irl/pending` and `/irl/orphans` for
   reconciliation after an outage.
 - Published baseline latency and throughput figures are in
-  [benchmarks/results.md](https://github.com/horkos-labs/irl/blob/main/docs/benchmarks/results.md). Measure on your own
+  [benchmarks/results.md](https://github.com/norve-labs/irl/blob/main/docs/benchmarks/results.md). Measure on your own
   hardware before relying on any number.
 
 ## The public sandbox (irl.macropulse.live)
@@ -27,5 +27,5 @@ Don't route real orders through it.
 
 Not offered yet. If you need a managed deployment with an uptime commitment,
 retention guarantees or compliance reporting, tell us what you need:
-https://github.com/horkos-labs/irl-gateway/issues or hello@macropulse.live.
+https://github.com/norve-labs/irl-gateway/issues or hello@macropulse.live.
 Any future paid offering will publish its own SLA.

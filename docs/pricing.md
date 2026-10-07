@@ -4,10 +4,10 @@ IRL is free to use. There are no per-agent fees and no paid tiers today.
 
 | What | Licence | Cost |
 |---|---|---|
-| [IRL Engine](https://github.com/horkos-labs/irl) | FSL-1.1-ALv2: any use except offering IRL to others as a competing commercial product or service; each release becomes Apache 2.0 two years after publication | Free |
-| [IRL Gateway](https://github.com/horkos-labs/irl-gateway) (MCP) | MIT | Free |
-| [Python](https://github.com/horkos-labs/irl-sdk-python) and [TypeScript](https://github.com/horkos-labs/irl-sdk-ts) SDKs | MIT | Free |
-| [irl-verify](https://github.com/horkos-labs/irl-verify) | MIT | Free, for everyone, forever |
+| [IRL Engine](https://github.com/norve-labs/irl) | FSL-1.1-ALv2: any use except offering IRL to others as a competing commercial product or service; each release becomes Apache 2.0 two years after publication | Free |
+| [IRL Gateway](https://github.com/norve-labs/irl-gateway) (MCP) | MIT | Free |
+| [Python](https://github.com/norve-labs/irl-sdk-python) and [TypeScript](https://github.com/norve-labs/irl-sdk-ts) SDKs | MIT | Free |
+| [irl-verify](https://github.com/norve-labs/irl-verify) | MIT | Free, for everyone, forever |
 | Public sandbox at [irl.macropulse.live](https://irl.macropulse.live) | — | Free, best effort |
 
 ## What the layers mean now
@@ -26,4 +26,4 @@ white-labelling it needs a commercial licence: hello@macropulse.live.
 
 A hosted offering for teams (managed IRL, retention guarantees, compliance
 reports) may follow, shaped by early users. Tell us what you'd need:
-https://github.com/horkos-labs/irl-gateway/issues
+https://github.com/norve-labs/irl-gateway/issues
