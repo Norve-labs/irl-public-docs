@@ -52,7 +52,7 @@ Benchmark script: `bench/authorize.lua` (wrk2-compatible).
 ```bash
 wrk2 -t4 -c100 -d60s -R 1000 \
   -s bench/authorize.lua \
-  https://irl.macropulse.live
+  https://norve.dev
 ```
 
 Adjust `-R` (target rate) and `-c` (connections) for your concurrency target.

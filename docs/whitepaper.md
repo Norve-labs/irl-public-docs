@@ -1,7 +1,7 @@
 # IRL — Intent, Reasoning, and Liability
 ## Whitepaper v5.0
 
-*IRL · October 2026 · [github.com/norve-labs/irl](https://github.com/norve-labs/irl) · [irl.macropulse.live](https://irl.macropulse.live)*
+*IRL · October 2026 · [github.com/norve-labs/irl](https://github.com/norve-labs/irl) · [norve.dev](https://norve.dev)*
 
 > **What changed in v5.0.** IRL is now its own project: free to use, source
 > available under FSL-1.1-ALv2 (§18), and independent of any regime provider.

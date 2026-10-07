@@ -8,7 +8,7 @@ IRL is free to use. There are no per-agent fees and no paid tiers today.
 | [IRL Gateway](https://github.com/norve-labs/irl-gateway) (MCP) | MIT | Free |
 | [Python](https://github.com/norve-labs/irl-sdk-python) and [TypeScript](https://github.com/norve-labs/irl-sdk-ts) SDKs | MIT | Free |
 | [irl-verify](https://github.com/norve-labs/irl-verify) | MIT | Free, for everyone, forever |
-| Public sandbox at [irl.macropulse.live](https://irl.macropulse.live) | — | Free, best effort |
+| Public sandbox at [norve.dev](https://norve.dev) | — | Free, best effort |
 
 ## What the layers mean now
 
