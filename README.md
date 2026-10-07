@@ -1,10 +1,5 @@
 <div align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/brand/logo-mono.svg">
-  <img src=".github/brand/logo-green.svg" alt="MacroPulse" width="72" height="72">
-</picture>
-
-<sub>Part of the <a href="https://github.com/macropulse-lab/macropulse-platform">MacroPulse platform</a></sub>
+<sub>IRL by <a href="https://github.com/horkos-labs">Horkos Labs</a></sub>
 </div>
 
 # IRL Engine — Public Documentation
@@ -85,7 +80,7 @@ async with IRLClient("https://irl.macropulse.live", "your-token", "https://api.m
         print(result.trace_id, result.reasoning_hash)
 ```
 
-[irl-sdk on PyPI](https://pypi.org/project/irl-sdk/) · [Python SDK repo](https://github.com/macropulse-lab/irl-sdk-python)
+[irl-sdk on PyPI](https://pypi.org/project/irl-sdk/) · [Python SDK repo](https://github.com/horkos-labs/irl-sdk-python)
 
 ---
 
@@ -132,7 +127,7 @@ if (result.authorized) {
 await client.close();
 ```
 
-[irl-sdk on npm](https://www.npmjs.com/package/irl-sdk) · [TypeScript SDK repo](https://github.com/macropulse-lab/irl-sdk-ts)
+[irl-sdk on npm](https://www.npmjs.com/package/irl-sdk) · [TypeScript SDK repo](https://github.com/horkos-labs/irl-sdk-ts)
 
 ---
 
@@ -154,11 +149,11 @@ Open [Swagger UI](https://irl.macropulse.live/swagger-ui/), pick an `agent_id`, 
 
 | Repo | Description |
 |---|---|
-| [irl](https://github.com/macropulse-lab/irl) | Core IRL Engine: mandates, cryptographic sealing, Layer 2, Bitcoin anchoring (FSL-1.1-ALv2) |
-| [irl-gateway](https://github.com/macropulse-lab/irl-gateway) | MCP server: any AI agent trades through IRL (`pip install irl-gateway`, MIT) |
-| [irl-sdk-python](https://github.com/macropulse-lab/irl-sdk-python) | Async Python SDK (MIT) |
-| [irl-sdk-ts](https://github.com/macropulse-lab/irl-sdk-ts) | TypeScript/Node.js SDK, CJS + ESM (MIT) |
-| [irl-verify](https://github.com/macropulse-lab/irl-verify) | Offline proof-bundle verifier (MIT) |
+| [irl](https://github.com/horkos-labs/irl) | Core IRL Engine: mandates, cryptographic sealing, Layer 2, Bitcoin anchoring (FSL-1.1-ALv2) |
+| [irl-gateway](https://github.com/horkos-labs/irl-gateway) | MCP server: any AI agent trades through IRL (`pip install irl-gateway`, MIT) |
+| [irl-sdk-python](https://github.com/horkos-labs/irl-sdk-python) | Async Python SDK (MIT) |
+| [irl-sdk-ts](https://github.com/horkos-labs/irl-sdk-ts) | TypeScript/Node.js SDK, CJS + ESM (MIT) |
+| [irl-verify](https://github.com/horkos-labs/irl-verify) | Offline proof-bundle verifier (MIT) |
 | [MacroPulse](https://macropulse.live) | One optional signed regime source (MTA) for Layer 2 |
 
 ---
@@ -206,5 +201,5 @@ Code examples in documentation: MIT
 ---
 
 <div align="center">
-<sub>Part of the <a href="https://github.com/macropulse-lab/macropulse-platform">MacroPulse platform</a> · <a href="https://macropulse.live">macropulse.live</a> · <a href="https://macropulse.live/irl">IRL Engine</a></sub>
+<sub>IRL by <a href="https://github.com/horkos-labs">Horkos Labs</a> · <a href="https://irl.macropulse.live">irl.macropulse.live</a></sub>
 </div>
