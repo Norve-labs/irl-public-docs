@@ -4,15 +4,15 @@
 
 # IRL Engine — Public Documentation
 
-[![Docs Version](https://img.shields.io/badge/docs-v2.0.0-blue)](https://irl.macropulse.live)
+[![Docs Version](https://img.shields.io/badge/docs-v2.0.0-blue)](https://norve.dev)
 [![License](https://img.shields.io/badge/docs-CC%20BY--SA%204.0-green)](LICENSE)
-[![Sandbox](https://img.shields.io/badge/sandbox-live-brightgreen)](https://irl.macropulse.live)
+[![Sandbox](https://img.shields.io/badge/sandbox-live-brightgreen)](https://norve.dev)
 
 **IRL (Immutable Reasoning Log)** is a cryptographic pre-execution compliance gateway for autonomous AI trading agents. Every trade decision is sealed with SHA-256 before it reaches the exchange, producing a tamper-evident audit trail that maps directly to MiFID II, EU AI Act, and SEC Rule 15c3-5 requirements.
 
 - **Website:** [macropulse.live/irl](https://macropulse.live/irl)
-- **Live API sandbox:** [irl.macropulse.live](https://irl.macropulse.live)
-- **Interactive docs (Swagger UI):** [irl.macropulse.live/swagger-ui/](https://irl.macropulse.live/swagger-ui/)
+- **Live API sandbox:** [norve.dev](https://norve.dev)
+- **Interactive docs (Swagger UI):** [norve.dev/swagger-ui/](https://norve.dev/swagger-ui/)
 - **Licensing:** gabriel.veron134@gmail.com
 
 ---
@@ -63,7 +63,7 @@ pip install irl-sdk
 ```python
 from irl_sdk import IRLClient, AuthorizeRequest, TradeAction, OrderType
 
-async with IRLClient("https://irl.macropulse.live", "your-token", "https://api.macropulse.live") as client:
+async with IRLClient("https://norve.dev", "your-token", "https://api.macropulse.live") as client:
     result = await client.authorize(AuthorizeRequest(
         agent_id="your-agent-uuid",
         model_id="my-model-v1",
@@ -94,7 +94,7 @@ npm install irl-sdk
 import { IRLClient } from "irl-sdk";
 
 const client = new IRLClient({
-  irlUrl: "https://irl.macropulse.live",
+  irlUrl: "https://norve.dev",
   apiToken: process.env.IRL_API_TOKEN!,
 });
 
@@ -133,7 +133,7 @@ await client.close();
 
 ## Try It Now — No Setup Required
 
-The sandbox at [irl.macropulse.live](https://irl.macropulse.live) has three pre-seeded demo agents:
+The sandbox at [norve.dev](https://norve.dev) has three pre-seeded demo agents:
 
 | Use case | agent_id |
 |---|---|
@@ -141,7 +141,7 @@ The sandbox at [irl.macropulse.live](https://irl.macropulse.live) has three pre-
 | Equities | `00000000-0000-4000-a000-000000000002` |
 | Futures | `00000000-0000-4000-a000-000000000003` |
 
-Open [Swagger UI](https://irl.macropulse.live/swagger-ui/), pick an `agent_id`, and run the full authorize → bind-execution flow interactively.
+Open [Swagger UI](https://norve.dev/swagger-ui/), pick an `agent_id`, and run the full authorize → bind-execution flow interactively.
 
 ---
 
@@ -201,5 +201,5 @@ Code examples in documentation: MIT
 ---
 
 <div align="center">
-<sub>IRL by <a href="https://github.com/norve-labs">Norve</a> · <a href="https://irl.macropulse.live">irl.macropulse.live</a></sub>
+<sub>IRL by <a href="https://github.com/norve-labs">Norve</a> · <a href="https://norve.dev">norve.dev</a></sub>
 </div>

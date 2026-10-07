@@ -18,7 +18,7 @@ You run it, so availability is yours. The engine is built for it:
   [benchmarks/results.md](https://github.com/norve-labs/irl/blob/main/docs/benchmarks/results.md). Measure on your own
   hardware before relying on any number.
 
-## The public sandbox (irl.macropulse.live)
+## The public sandbox (norve.dev)
 
 Best effort, for evaluation. It may be reset or rate-limited without notice.
 Don't route real orders through it.

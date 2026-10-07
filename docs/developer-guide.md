@@ -37,7 +37,7 @@ The integration has two mandatory calls per trade:
 from irl_sdk import IRLClient, AuthorizeRequest, TradeAction, OrderType
 
 async with IRLClient(
-    irl_url="https://irl.macropulse.live",
+    irl_url="https://norve.dev",
     api_token="your-token",
     mta_url="https://api.macropulse.live",
 ) as client:
@@ -90,7 +90,7 @@ pip install irl-sdk
 
 | Parameter | Type | Notes |
 |-----------|------|-------|
-| `irl_url` | str | IRL Engine base URL, e.g. `"https://irl.macropulse.live"` |
+| `irl_url` | str | IRL Engine base URL, e.g. `"https://norve.dev"` |
 | `api_token` | str | Bearer token from `IRL_API_TOKENS` |
 | `mta_url` | str | MTA operator base URL for heartbeat fetch. Omit when `LAYER2_ENABLED=false`. |
 
@@ -127,7 +127,7 @@ npm install irl-sdk
 import { IRLClient, IRLError, IRLHeartbeatError } from "irl-sdk";
 
 const client = new IRLClient({
-  irlUrl: "https://irl.macropulse.live",
+  irlUrl: "https://norve.dev",
   apiToken: process.env.IRL_API_TOKEN!,
   mtaUrl: "https://api.macropulse.live",  // omit if LAYER2_ENABLED=false
   timeoutMs: 5_000,                        // optional, default 5000
