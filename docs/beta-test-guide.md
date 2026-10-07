@@ -239,8 +239,8 @@ Open a GitHub issue or email **hello@macropulse.live**.
 
 | Resource | Link |
 |----------|------|
-| Full docs | https://github.com/horkos-labs/irl-public-docs |
+| Full docs | https://github.com/norve-labs/irl-public-docs |
 | Python SDK | `pip install irl-sdk` |
 | TypeScript SDK | `npm install irl-sdk` |
-| API reference | https://github.com/horkos-labs/irl-public-docs/blob/master/docs/developer-guide.md |
+| API reference | https://github.com/norve-labs/irl-public-docs/blob/master/docs/developer-guide.md |
 | MacroPulse regime API | https://macropulse.live |
